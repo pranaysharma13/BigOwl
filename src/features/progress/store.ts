@@ -26,7 +26,7 @@ interface ProgressState {
   toggleSolved: (problemId: string) => void;
   addAssessment: (r: AssessResult) => void;
   setLang: (lang: 'pseudo' | 'py' | 'cpp') => void;
-  /** Merge data from elsewhere (an import file or the server) without counting it as a local change. */
+  /** Merge data from the server without counting it as a local change. */
   mergeIn: (other: Partial<ProgressData>, countAsChange?: boolean) => void;
   /** Replace everything with empty progress (used on delete and sign-out). */
   clearAll: () => void;
