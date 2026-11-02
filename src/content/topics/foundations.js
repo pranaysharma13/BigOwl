@@ -1,4 +1,4 @@
-import { I, Rec, fmtV, h, parseNums, rnd, shuffle, sv } from '../../engine/helpers';
+import { I, Rec, fmtV, h, parseNums, rangeHl, rnd, shuffle, sv } from '../../engine/helpers';
 import { renderArr } from '../../engine/stage';
 import { Quiz } from '../../engine/quiz';
 import { setPart, topic } from '../registry';

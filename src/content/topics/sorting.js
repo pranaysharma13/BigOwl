@@ -3,7 +3,8 @@ import { setPart, topic } from '../registry';
 
 setPart('sort');
 export const numsIn = (lo = 1, hi = 99, min = 2, max = 16) => s => parseNums(s, { min, max, lo, hi });
-export const rangeHl = (from, to, cls, base = {}) => { const o = { ...base }; for (let k = from; k <= to; k++) o[k] = cls; return o; };
+import { rangeHl } from '../../engine/helpers';
+export { rangeHl };
 
 /* ---------------- elementary sorts ---------------- */
 topic({

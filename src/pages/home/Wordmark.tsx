@@ -67,11 +67,14 @@ export function Wordmark({ onDone }: { onDone?: (swaps: number) => void }) {
       timer.current = setTimeout(tick, 320);
     };
     timer.current = setTimeout(tick, 650);
-  }, [onDone]);
+  }, [onDone, ref]);
 
   useEffect(() => {
-    run();
-    return () => clearTimeout(timer.current);
+    const id = requestAnimationFrame(run);
+    return () => {
+      cancelAnimationFrame(id);
+      clearTimeout(timer.current);
+    };
   }, [run]);
 
   return (

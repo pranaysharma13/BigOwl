@@ -10,9 +10,12 @@ function CurriculumMap() {
   const nav = useNavigate();
   const [hover, setHover] = useState<string | null>(null);
   const CW = 168, CG = 34, RH = 32, TOP = 34, NW = 152, NH = 24;
-  const cols = PARTS.map((P) => TOPICS.filter((t) => t.part === P.id));
-  const pos: Record<string, { x: number; y: number }> = {};
-  cols.forEach((ts, c) => ts.forEach((t, r) => (pos[t.id] = { x: 10 + c * (CW + CG), y: TOP + r * RH })));
+  const cols = useMemo(() => PARTS.map((P) => TOPICS.filter((t) => t.part === P.id)), []);
+  const pos = useMemo(() => {
+    const out: Record<string, { x: number; y: number }> = {};
+    cols.forEach((ts, c) => ts.forEach((t, r) => (out[t.id] = { x: 10 + c * (CW + CG), y: TOP + r * RH })));
+    return out;
+  }, [cols]);
   const H = TOP + Math.max(...cols.map((c) => c.length)) * RH + 10, W = 10 + PARTS.length * (CW + CG);
   const links = useMemo(() => TOPICS.flatMap((t) => (t.prereq ?? []).filter((p) => pos[p]).map((p) => ({ from: p, to: t.id }))), [pos]);
   const anc = useMemo(() => {

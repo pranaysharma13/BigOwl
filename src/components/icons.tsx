@@ -30,11 +30,10 @@ export const User = ({ size }: P) => (
 );
 export const Mark = () => (
   <svg width="24" height="22" viewBox="0 0 24 22" aria-hidden="true">
-    <path d="M3 4.5 6.5 7M21 4.5 17.5 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    <circle cx="7.3" cy="11" r="4.8" fill="var(--paper)" stroke="currentColor" strokeWidth="1.6" />
-    <circle cx="16.7" cy="11" r="4.8" fill="var(--paper)" stroke="currentColor" strokeWidth="1.6" />
-    <circle cx="7.3" cy="11" r="2.1" fill="var(--blue)" />
-    <circle cx="16.7" cy="11" r="2.1" fill="currentColor" />
-    <path d="M10.6 16.4h2.8L12 19z" fill="currentColor" />
+    <path d="M3 4.5 6.5 7M21 4.5 17.5 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <rect x="2.6" y="7.4" width="8.6" height="8.6" rx="1.2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+    <rect x="12.8" y="7.4" width="8.6" height="8.6" rx="1.2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+    <rect x="5.4" y="10.2" width="3" height="3" fill="var(--blue)" />
+    <rect x="15.6" y="10.2" width="3" height="3" fill="currentColor" />
   </svg>
 );
