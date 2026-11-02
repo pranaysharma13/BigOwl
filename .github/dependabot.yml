@@ -1,0 +1,8 @@
+# Keeps the commit SHAs pinned in .github/workflows up to date (security review L6).
+# Only GitHub Actions are updated; npm dependencies are updated by hand.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
