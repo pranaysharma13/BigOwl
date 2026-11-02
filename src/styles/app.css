@@ -436,7 +436,8 @@ main { flex: 1; }
 }
 
 /* ---------- assessments ---------- */
-.modes { display: flex; flex-direction: column; border-top: 1px solid var(--ink); }
+.modes { display: flex; flex-direction: column; }
+.amode > .pidx-n { align-self: start; padding-top: 12px; }
 .amode { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: 20px; align-items: center; padding: 26px 0; border-bottom: 1px solid var(--rule); }
 .amode.focus { background: linear-gradient(90deg, var(--blue-soft), transparent 70%); }
 .mode-t { display: flex; flex-direction: column; gap: 8px; max-width: 70ch; }
