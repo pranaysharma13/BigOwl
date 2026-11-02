@@ -599,7 +599,7 @@ topic({
 <tr><td>Right-Left</td><td>left subtree of the right child</td><td>right-rotate the child, then left-rotate the node</td></tr></table>
 <p>One single or double rotation restores the subtree to the height it had before the insertion, so nothing above needs fixing. Deletion can require rotations at several levels on the way up, still O(lg <i>n</i>) in total.</p>
 <h3>AVL or red-black?</h3>
-<p>AVL trees are shallower, so lookups are a little faster. Red-black trees do fewer rotations per update. Databases with read-heavy workloads sometimes prefer AVL; most standard libraries chose red-black.</p>
+<p>AVL trees are shallower, so lookups are a little faster. Red-black trees do fewer rotations per update, which is why most standard libraries chose red-black. (Databases are a different story: on disk they use B-trees and B+ trees.)</p>
 <h3>In interviews</h3>
 <ul><li>Balanced Binary Tree (LC 110) checks exactly the AVL condition with a postorder height computation.</li><li>Convert Sorted Array to BST (LC 108): pick the middle element as root recursively; the result is height balanced.</li></ul>`,
   code: {
@@ -1417,7 +1417,7 @@ topic({
 <h3>Update</h3>
 <p>Change a leaf, then recompute the sums on the path back to the root: O(log <i>n</i>). With <b>lazy propagation</b>, range updates (“add 5 to every element in [l, r]”) also run in O(log <i>n</i>) by postponing work at fully covered nodes.</p>
 <h3>Fenwick trees</h3>
-<p>A <b>Fenwick tree</b> (binary indexed tree) supports prefix sums and point updates in O(log <i>n</i>) with a tiny array and a few lines of code. Index <i>i</i> stores the sum of the last <code>i &amp; -i</code> elements ending at <i>i</i>. Prefer it when you only need sums; use a segment tree for min/max or range updates.</p>
+<p>A <b>Fenwick tree</b> (binary indexed tree) supports prefix sums and point updates in O(log <i>n</i>) with a tiny array and a few lines of code. Index <i>i</i> stores the sum of the last <code>i &amp; -i</code> elements ending at <i>i</i>. It also handles range updates: store differences to get range update with point query, or keep two Fenwick trees for range update with range query. Its real limitation is that a prefix trick needs an invertible operation, so for min or max over arbitrary ranges use a segment tree.</p>
 <h3>In interviews</h3>
 <ul><li>Range Sum Query – Mutable (LC 307) is the canonical problem.</li><li>Count of Smaller Numbers After Self (LC 315) and Reverse Pairs (LC 493) with coordinate compression and a Fenwick tree.</li><li>The Skyline Problem (LC 218) and My Calendar III (LC 732) can use segment trees, though heaps or sweep lines are often simpler.</li></ul>`,
   code: {

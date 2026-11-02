@@ -948,7 +948,7 @@ topic({
 <h3>Longest paths and critical paths</h3>
 <p>In a general graph, longest simple path is NP-hard. In a DAG it is easy: negate the weights and find shortest paths, or run the same algorithm with “if <i>v.d</i> &lt; <i>u.d</i> + <i>w</i>” and initial values −∞. In project scheduling (PERT charts), vertices are milestones, edges are tasks with durations, and the longest path is the <b>critical path</b>: the minimum time to finish the whole project, and the tasks that cannot slip.</p>
 <h3>Why this matters for DP</h3>
-<p>Every dynamic program is secretly a shortest or longest path problem on a DAG of subproblems, evaluated in topological order. Seeing that link makes DP recurrences much easier to design.</p>
+<p>Many dynamic programs are secretly a shortest or longest path problem on a DAG of subproblems, evaluated in topological order. Seeing that link makes DP recurrences much easier to design. The view fits DPs where each state picks one predecessor (rod cutting, LCS, knapsack). DPs that combine several subproblems at once, such as matrix-chain, interval DP and tree DP, do not reduce to a single path, though their subproblems still form a DAG.</p>
 <h3>In interviews</h3>
 <ul><li>Longest Increasing Path in a Matrix (LC 329): the grid with edges toward larger values is a DAG.</li><li>Parallel Courses III (LC 2050): critical path.</li><li>Course Schedule problems that ask for the minimum number of semesters.</li></ul>`,
   code: {

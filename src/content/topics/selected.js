@@ -143,7 +143,7 @@ topic({
 <p><code>kmpMatcher</code> scans the text once with a state <i>q</i> (characters currently matched). On a mismatch it sets <i>q</i> = π[<i>q</i>] repeatedly until the next character can extend the match or <i>q</i> = 0. When <i>q</i> = <i>m</i>, a match ends here; report it and continue with <i>q</i> = π[<i>m</i>].</p>
 <div class="note key"><b>Why it is linear.</b> <i>q</i> increases by at most 1 per text character, and every fallback decreases it. It can never decrease more often than it increased, so the total number of fallbacks is at most <i>n</i>. The same amortized argument bounds the prefix-function computation by Θ(<i>m</i>).</div>
 <h3>In interviews</h3>
-<ul><li>Find the Index of the First Occurrence (LC 28) in guaranteed linear time.</li><li>Shortest Palindrome (LC 214): compute π on <code>s + '#' + reverse(s)</code>.</li><li>Repeated Substring Pattern (LC 459): <i>s</i> has a period <i>p</i> = <i>n</i> − π[<i>n</i>] when <i>p</i> divides <i>n</i>.</li><li>The Z-algorithm is an alternative with the same linear bound.</li></ul>`,
+<ul><li>Find the Index of the First Occurrence (LC 28) in guaranteed linear time.</li><li>Shortest Palindrome (LC 214): compute π on <code>s + '#' + reverse(s)</code>.</li><li>Repeated Substring Pattern (LC 459): <i>s</i> is a repeated pattern exactly when π[<i>n</i>] &gt; 0 and <i>p</i> = <i>n</i> − π[<i>n</i>] divides <i>n</i>. Without π[<i>n</i>] &gt; 0, <i>p</i> = <i>n</i> would divide <i>n</i> for every string.</li><li>The Z-algorithm is an alternative with the same linear bound.</li></ul>`,
   code: {
     pseudo: `computePrefixFunction(P)
   m ← len(P)
@@ -425,10 +425,10 @@ topic({
 <p>In a <b>public-key cryptosystem</b>, each person publishes a key <i>P</i> and keeps a matching secret key <i>S</i>. Anyone can encrypt with <i>P</i>, but only the holder of <i>S</i> can decrypt. Applying <i>S</i> first gives a <b>digital signature</b> that anyone can check with <i>P</i>.</p>
 <h3>RSA</h3>
 <ol><li>Pick two large random primes <i>p</i> and <i>q</i> (each hundreds of digits long).</li><li>Compute <i>n</i> = <i>pq</i> and φ(<i>n</i>) = (<i>p</i> − 1)(<i>q</i> − 1).</li><li>Choose a small odd <i>e</i> relatively prime to φ(<i>n</i>), often 65537.</li><li>Compute <i>d</i> = <i>e</i><sup>−1</sup> mod φ(<i>n</i>) with <a href="/learn/number-theory">extended Euclid</a>.</li><li>Publish <i>P</i> = (<i>e</i>, <i>n</i>); keep <i>S</i> = (<i>d</i>, <i>n</i>) secret.</li></ol>
-<p>Encrypt a message <i>M</i> &lt; <i>n</i> as <i>C</i> = <i>M<sup>e</sup></i> mod <i>n</i>; decrypt as <i>M</i> = <i>C<sup>d</sup></i> mod <i>n</i>. Both are modular exponentiations. Correctness follows from Euler's theorem: <i>ed</i> ≡ 1 mod φ(<i>n</i>), so <i>M<sup>ed</sup></i> ≡ <i>M</i> (mod <i>n</i>).</p>
+<p>Encrypt a message <i>M</i> &lt; <i>n</i> as <i>C</i> = <i>M<sup>e</sup></i> mod <i>n</i>; decrypt as <i>M</i> = <i>C<sup>d</sup></i> mod <i>n</i>. Both are modular exponentiations. Since <i>ed</i> ≡ 1 mod φ(<i>n</i>), Euler's theorem gives <i>M<sup>ed</sup></i> ≡ <i>M</i> (mod <i>n</i>) for every message coprime to <i>n</i>. The book proves it for every message, including multiples of <i>p</i> or <i>q</i>, by applying Fermat's little theorem modulo <i>p</i> and modulo <i>q</i> separately and combining the two with the Chinese remainder theorem.</p>
 <p>Security rests on the belief that <b>factoring</b> <i>n</i> is hard. Anyone who factors <i>n</i> can compute φ(<i>n</i>) and then <i>d</i>. Try it with the calculator under <b>Visualize</b>, using tiny primes.</p>
 <h3>Finding primes: Miller–Rabin</h3>
-<p>Primes are plentiful (about 1 in ln <i>n</i> numbers near <i>n</i>), so pick random odd numbers and test them. Fermat's little theorem says <i>a</i><sup><i>n</i>−1</sup> ≡ 1 (mod <i>n</i>) for prime <i>n</i>, but some composites (Carmichael numbers, such as 561) pass that test for every base. <b>Miller–Rabin</b> also checks for nontrivial square roots of 1 while squaring. Each random base exposes a composite with probability at least 1/2, so <i>s</i> trials give error at most 2<sup>−<i>s</i></sup>.</p>
+<p>Primes are plentiful (about 1 in ln <i>n</i> numbers near <i>n</i>), so pick random odd numbers and test them. Fermat's little theorem says <i>a</i><sup><i>n</i>−1</sup> ≡ 1 (mod <i>n</i>) for prime <i>n</i>, but some composites (Carmichael numbers, such as 561) pass that test for every base coprime to them. Only bases that share a factor with <i>n</i> expose them (3, 11 and 17 for 561), and those are rare. <b>Miller–Rabin</b> also checks for nontrivial square roots of 1 while squaring. Each random base exposes a composite with probability at least 1/2, so <i>s</i> trials give error at most 2<sup>−<i>s</i></sup>.</p>
 <h3>Integer factorization</h3>
 <p>Section 31.9 presents Pollard's rho heuristic, which finds small factors in about <i>n</i><sup>1/4</sup> steps. No known classical algorithm factors RSA-size numbers in polynomial time.</p>`,
   code: {
@@ -527,7 +527,7 @@ bool isPrime(ull n) {                       // deterministic for 64-bit n
   quiz: [
     { q: 'In RSA, the secret exponent d is…', opts: ['a random prime', 'the inverse of e modulo φ(n)', 'p + q', 'e²'], a: 1, why: 'Then (Mᵉ)ᵈ ≡ M (mod n).' },
     { q: 'RSA’s security depends on the difficulty of…', opts: ['sorting', 'computing gcds', 'factoring n = pq', 'modular exponentiation'], a: 2, why: 'Factoring n reveals φ(n) and therefore d.' },
-    { q: 'Why is Fermat’s test alone not enough for primality?', opts: ['It is too slow', 'Carmichael numbers like 561 pass it for every base', 'It rejects primes', 'It needs factoring'], a: 1, why: 'Miller–Rabin adds the square-root check that catches them.' },
+    { q: 'Why is Fermat’s test alone not enough for primality?', opts: ['It is too slow', 'Carmichael numbers like 561 pass it for every base coprime to them', 'It rejects primes', 'It needs factoring'], a: 1, why: 'Miller–Rabin adds the square-root check that catches them.' },
     { q: 'Miller–Rabin with s random bases errs with probability at most…', opts: ['1/s', '2⁻ˢ', '1/2', '0'], a: 1, why: 'Each base catches a composite with probability at least 1/2.' },
   ],
 });
@@ -659,7 +659,7 @@ topic({
   props: ['AND OR XOR', 'Masks'],
   tags: 'bit manipulation xor and or shift mask popcount lowbit subset bitmask',
   learn: `
-<p>Integers are stored in binary, and processors operate on all of their bits at once. Bit tricks give constant-time set operations on small sets, compact state for DP, and a few famously clever interview answers. The book uses them in Fenwick-style indexing, radix sort and the van Emde Boas tree.</p>
+<p>Integers are stored in binary, and processors operate on all of their bits at once. Bit tricks give constant-time set operations on small sets, compact state for DP, and a few famously clever interview answers. The book uses them in radix sort and the van Emde Boas tree.</p>
 <h3>The operators</h3>
 <table><tr><th>Expression</th><th>Meaning</th></tr>
 <tr><td><code>x &amp; y</code>, <code>x | y</code>, <code>x ^ y</code></td><td>bitwise AND, OR, XOR</td></tr>

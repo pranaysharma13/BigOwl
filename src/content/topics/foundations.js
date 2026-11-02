@@ -76,7 +76,7 @@ topic({
     draw();
   },
   quiz: [
-    { q: 'Which statement about the RAM model is right?', opts: ['Every instruction takes the same constant time', 'Memory access cost depends on cache level', 'Multiple instructions run in parallel', 'Sorting is a single instruction'], a: 0, why: 'The RAM model counts simple operations as constant-time steps and ignores the memory hierarchy.' },
+    { q: 'Which statement about the RAM model is right?', opts: ['Each instruction takes a constant amount of time', 'Memory access cost depends on cache level', 'Multiple instructions run in parallel', 'Sorting is a single instruction'], a: 0, why: 'The RAM model counts simple operations as constant-time steps and ignores the memory hierarchy.' },
     { q: 'Why does the book usually analyze the worst case?', opts: ['It is easiest to compute', 'It gives a guarantee that holds for every input', 'It equals the average case', 'Best case is always constant'], a: 1, why: 'An upper bound on every input is something you can rely on.' },
     { q: 'A loop invariant must hold…', opts: ['only after the loop', 'before each iteration, including the first', 'only during the first iteration', 'at random points'], a: 1, why: 'Initialization, maintenance and termination together make the argument work, like induction.' },
     { q: 'Machine A runs 2n² instructions at 10¹⁰ per second. Machine B runs 50 n lg n at 10⁷ per second. For n = 10⁷, which finishes first?', opts: ['A', 'B', 'They tie'], a: 1, why: 'A takes about 20,000 seconds, B about 1,163 seconds. The better algorithm beats 1000 times faster hardware.' },
