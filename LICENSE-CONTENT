@@ -1,0 +1,42 @@
+BigOwl educational content
+Copyright (c) 2026 Pranay Sharma
+
+Licensed under the Creative Commons Attribution-NonCommercial 4.0
+International License (CC BY-NC 4.0).
+
+  Summary:    https://creativecommons.org/licenses/by-nc/4.0/
+  Legal code: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+WHAT THIS COVERS
+
+Everything in the src/content/ directory: topic explanations, pseudocode,
+code examples, quiz and assessment questions, interview pattern guides,
+problem lists, and the step-by-step visualizer scripts, including their
+narration and checkpoint questions.
+
+Everything else in this repository (the application code, visualizer engine,
+styles, tests and configuration) is licensed under the MIT License in the
+LICENSE file.
+
+WHAT YOU MAY DO
+
+Share and adapt this content for non-commercial purposes, as long as you
+credit "BigOwl" with a link to https://github.com/pranaysharma13/BigOwl,
+say whether you changed it, and link to the licence.
+
+WHAT YOU MAY NOT DO
+
+Use it for commercial purposes, such as selling it, putting it behind a
+paywall, or using it in a paid course or product, without written permission.
+
+THIRD-PARTY MATERIAL
+
+The curriculum follows the structure of "Introduction to Algorithms",
+3rd edition, by Cormen, Leiserson, Rivest and Stein (MIT Press). Section and
+figure numbers are cited for reference. No text or figures from the book are
+reproduced, and this licence grants no rights in the book.
+
+Problem names and numbers refer to LeetCode. LeetCode is a trademark of its
+owner, and no problem statements are reproduced.
+
+BigOwl is not affiliated with MIT Press, the book's authors, or LeetCode.
