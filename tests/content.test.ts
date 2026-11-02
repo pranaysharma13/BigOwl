@@ -95,3 +95,49 @@ describe('assessment pool', () => {
     }
   });
 });
+
+describe('topic drill answers', () => {
+  const last = (id: string, raw: string) => {
+    const v = TOPICS.find((t) => t.id === id)!.viz!;
+    const f = v.run(v.parse ? v.parse(raw) : raw);
+    return f[f.length - 1];
+  };
+  it('linear search counts comparisons', () => expect(last('algorithms', '31 41 59 26 41 58 / 26').ask?.value).toBe(4));
+  it('growth race verdicts', () => {
+    expect(last('asymptotic', '100n | n^2').ask?.answer).toBe(1);
+    expect(last('asymptotic', '2^n | n^3').ask?.answer).toBe(0);
+    expect(last('asymptotic', '3n | n').ask?.answer).toBe(2);
+  });
+  it('recursion tree totals and master cases', () => {
+    expect(last('recurrences', '2 2 1 16').msg).toMatch(/Total 80.*Θ\(n lg n\)/);
+    expect(last('recurrences', '4 2 1 16').msg).toContain('Θ(n²)');
+    expect(last('recurrences', '1 2 0 16').msg).toContain('Θ(lg n)');
+    expect(last('recurrences', '2 2 2 16').msg).toContain('Θ(n²)');
+  });
+  it('hiring counts hires', () => expect(last('probabilistic', '1 2 3 4 5 6 7 8').msg).toMatch(/^8 hires/));
+  it('miller-rabin', () => {
+    expect(last('rsa', '7 561').msg).toContain('composite');
+    expect(last('rsa', '2 341').msg).toContain('composite');
+    expect(last('rsa', '2 13').msg).toContain('in fact prime');
+  });
+  it('popcount', () => expect(last('bit-manipulation', '44').ask?.value).toBe(3));
+  it('certificate check', () => {
+    expect(last('np-complete', '1 -2 3, -1 2 3, 1 2 -3, -1 -2 -3 | 110').msg).toContain('All 4 clauses');
+    expect(last('np-complete', '1 -2 3, -1 2 3, 1 2 -3, -1 -2 -3 | 111').msg).toContain('Rejected');
+  });
+  it('fibonacci heap consolidate', () => expect(last('fib-heaps', '23 7 21 3 18 52 38 39 41').ask?.value).toBe(7));
+  it('veb successor', () => {
+    expect(last('veb', '2 3 4 5 7 14 15 | 4').ask?.value).toBe(5);
+    expect(last('veb', '2 3 4 5 7 14 15 | 7').ask?.value).toBe(14);
+    expect(last('veb', '1 6 9 | 12').msg).toContain('no successor');
+  });
+  it('fft leaves are bit-reversed', () => {
+    const v = TOPICS.find((t) => t.id === 'fft')!.viz!;
+    const f = v.run(v.parse!('8'));
+    expect((f[f.length - 1].s as { arrays: { a: number[] }[] }).arrays[0].a).toEqual([0, 4, 2, 6, 1, 5, 3, 7]);
+  });
+  it('lp optimum', () => expect(last('linear-programming', '3 2 | 1 1 4; 1 3 6').msg).toContain('maximum is 12 at (4, 0)'));
+  it('work and span', () => expect(last('multithreaded', 'A>B A>C A>D B>E C>E D>F E>G F>G').ask?.value).toBe(4));
+  it('lu decomposition', () => expect(last('matrix-ops', '2 1 1  4 3 3  8 7 9').ask?.value).toBe(2));
+  it('every topic now has a step-through figure', () => expect(TOPICS.filter((t) => !t.viz).map((t) => t.id)).toEqual([]));
+});

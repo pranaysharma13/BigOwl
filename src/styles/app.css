@@ -83,7 +83,7 @@ main { flex: 1; }
 .check-row input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--blue); flex: none; }
 
 /* ============ top bar ============ */
-.topbar { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--paper) 90%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+.topbar { position: sticky; top: 0; z-index: 40; background: var(--paper); border-bottom: 1px solid var(--rule); }
 .topbar .wrap { height: var(--bar-h); display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 24px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 650; font-size: 14.5px; letter-spacing: -0.01em; white-space: nowrap; }
 .brand .mark { width: 22px; height: 22px; display: grid; place-items: center; }

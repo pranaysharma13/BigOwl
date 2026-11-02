@@ -111,3 +111,11 @@ export function topic(t: TopicInput): void {
 }
 
 export const partOf = (t: Topic): Part => PARTS.find((p) => p.id === t.part)!;
+
+/** Attaches a step-through visualizer to a topic registered earlier (used by topics/drills). */
+export function addViz(id: string, viz: Viz): void {
+  const t = TOPIC[id];
+  if (!t) throw new Error(`Unknown topic "${id}"`);
+  if (t.viz) throw new Error(`Topic "${id}" already has a visualizer`);
+  t.viz = viz;
+}
