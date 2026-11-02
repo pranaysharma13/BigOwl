@@ -183,6 +183,14 @@ describe('content review fixes', () => {
       expect(fs.some((f) => (f.msg ?? '').includes('the insertion fails')), raw).toBe(true);
     }
   });
+  it('open addressing highlights the hashInsert pseudocode lines', () => {
+    const fs = frames('hash-tables', 'linear m=11: 10 22 31 4 15');
+    const store = fs.filter((f) => (f.msg ?? '').startsWith('Slot '));
+    expect(store.length).toBeGreaterThan(0);
+    for (const f of store) expect([f.line].flat()).toContain(12);
+    expect(fs[0].line).toBe(7);
+    expect(fs.filter((f) => (f.msg ?? '').startsWith('Probe ')).every((f) => f.line === 14)).toBe(true);
+  });
   it('complexity questions ask for the tightest bound', () => {
     for (const q of complexityQuestions()) {
       expect(q.q).toContain('tightest');

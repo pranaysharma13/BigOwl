@@ -568,14 +568,14 @@ vector<int> twoSum(const vector<int>& nums, int target) {   // LeetCode 1
         const probe = (k, i) => kind === 'linear' ? (k + i) % m : kind === 'quadratic' ? (k + i + 3 * i * i) % m : (k + i * h2(k)) % m;
         const fn = kind === 'linear' ? `h(k, i) = (k + i) mod ${m}` : kind === 'quadratic' ? `h(k, i) = (k + i + 3i²) mod ${m}` : `h(k, i) = (k + i·(1 + k mod ${m - 1})) mod ${m}`;
         const st = (hl, vars = {}) => ({ vars: { ...vars, α: (T.filter(x => x != null).length / m).toFixed(2) }, arrays: [{ name: 'T', label: 'T[0..' + (m - 1) + ']: ' + fn, a: [...T], hl, base: 0 }] });
-        R.add(st({}), 9, `Empty table, ${fn}.`);
+        R.add(st({}), 7, `Empty table, ${fn}.`);
         let total = 0, failed = 0;
         for (const k of keys) {
           let i = 0, j, found = false;
           for (; i < m; i++) {
             j = probe(k, i);
             if (T[j] == null) { found = true; break; }
-            R.add(st({ [j]: 'cmp' }, { k, i }), 13, `Probe ${i}: slot ${j} holds ${T[j]}. Collision${i + 1 < m ? `, try i = ${i + 1}` : ''}.`, i === 0 ? { q: `Key ${k}: which slot is probed first?`, pick: 'T:' + j } : null);
+            R.add(st({ [j]: 'cmp' }, { k, i }), 14, `Probe ${i}: slot ${j} holds ${T[j]}. Collision${i + 1 < m ? `, try i = ${i + 1}` : ''}.`, i === 0 ? { q: `Key ${k}: which slot is probed first?`, pick: 'T:' + j } : null);
           }
           if (!found) {
             total += m; failed++;
@@ -586,7 +586,7 @@ vector<int> twoSum(const vector<int>& nums, int target) {   // LeetCode 1
           total += i + 1;
           const ask = i === 0 ? { q: `Key ${k}: which slot is probed first?`, pick: 'T:' + j } : (i === 1 ? { q: `Slot ${probe(k, 0)} was taken. Which slot is probed next?`, pick: 'T:' + j, hint: kind === 'double' ? `Step size h₂(${k}) = ${h2(k)}` : kind === 'linear' ? 'Move one slot to the right, wrapping around.' : 'i = 1 adds 1 + 3 = 4.' } : null);
           T[j] = k;
-          R.add(st({ [j]: 'found' }, { k, i }), 15, `Slot ${j} is empty. Store ${k} there after ${i + 1} probe${i ? 's' : ''}.`, ask);
+          R.add(st({ [j]: 'found' }, { k, i }), [11, 12], `Slot ${j} is empty. Store ${k} there after ${i + 1} probe${i ? 's' : ''}.`, ask);
         }
         const stored = keys.length - failed;
         R.add(st({}), 9, failed ? `Done. ${stored} of ${keys.length} keys stored; ${failed} insertion${failed === 1 ? '' : 's'} failed because the probe sequence never reached an empty slot. ${total} probes in all, ${(total / keys.length).toFixed(2)} per attempted insert.` : `Done. ${total} probes for ${keys.length} inserts, ${(total / keys.length).toFixed(2)} on average.`);
