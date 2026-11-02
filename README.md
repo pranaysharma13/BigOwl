@@ -48,29 +48,21 @@ Other scripts: `npm run build`, `npm run preview`, `npm test`, `npm run typechec
 
 ## Set up Supabase (once)
 
-1. **Database.** In the Supabase dashboard, open **SQL Editor → New query**, paste the whole of `supabase/migrations/20261102000000_progress.sql`, and run it. It creates the `progress` table, turns on row-level security so each person can read and write only their own row, and adds the `delete_my_account()` function used by the Account page.
-2. **Keys.** In **Project Settings → API**, copy the **Project URL** and the **anon / publishable** key into `.env.local`:
+1. **SQL Editor → New query**: paste `supabase/migrations/20261102000000_progress.sql` and run it.
+2. **Project Settings → API**: copy the Project URL and the anon key into `.env.local`:
    ```
    VITE_SUPABASE_URL=https://xxxx.supabase.co
    VITE_SUPABASE_ANON_KEY=...
    ```
-   These two values are public by design. **Never** put the `service_role` / secret key or the database password in this project, in Vercel, or in git.
-3. **Auth URLs.** In **Authentication → URL Configuration**:
-   - Site URL: your production URL, e.g. `https://bigowl.vercel.app`
-   - Redirect URLs: `http://localhost:5173/**` and `https://bigowl.vercel.app/**` (use your real domain)
-4. **Email provider.** Email sign-in is on by default. Supabase's built-in mailer is rate-limited (a few emails per hour), which is fine for a small group. For more, add your own SMTP server under **Authentication → Emails → SMTP Settings**.
+   Never use the `service_role` key or the database password anywhere in this project.
+3. **Authentication → URL Configuration**:
+   - Site URL: `https://<your-domain>`
+   - Redirect URLs: `http://localhost:5173/**` and `https://<your-domain>/**`
 
 ## Deploy to Vercel
 
-Either import the GitHub repository at vercel.com/new (framework preset: Vite), or use the CLI:
-
-```bash
-npm i -g vercel
-vercel            # first run links the project and makes a preview deployment
-vercel --prod     # production deployment
-```
-
-Then in **Vercel → Project → Settings → Environment Variables**, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` for Production and Preview, and redeploy. `vercel.json` already sets the SPA rewrites and security headers (Content-Security-Policy, HSTS and others).
+1. Import the GitHub repository at vercel.com/new (framework preset: Vite).
+2. **Settings → Environment Variables**: add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`, then redeploy.
 
 ## Content and credits
 
