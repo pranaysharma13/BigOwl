@@ -123,8 +123,8 @@ vector<vector<int>> buildMatrix(int n, const vector<pair<int, int>>& edges, bool
   viz: {
     inputHint: 'Edges: a-b (undirected) or a>b (directed)',
     presets: [
-      { label: 'Figure 22.1, undirected', input: 'r-s r-v s-w w-t w-x t-x t-u x-u x-y u-y', note: 'Each undirected edge appears in two adjacency lists, and the matrix is symmetric.' },
-      { label: 'Figure 22.2 style, directed', input: 'u>v u>x x>v v>y y>x w>y w>z z>z', note: 'Each directed edge appears once. Note the self-loop z → z.' },
+      { label: 'Figure 22.3 graph, undirected', input: 'r-s r-v s-w w-t w-x t-x t-u x-u x-y u-y', note: 'Each undirected edge appears in two adjacency lists, and the matrix is symmetric.' },
+      { label: 'Figure 22.4 graph, directed', input: 'u>v u>x x>v v>y y>x w>y w>z z>z', note: 'Each directed edge appears once. Note the self-loop z → z.' },
     ],
     random: () => randGraph(Math.random() < .5, false),
     parse: s => parseGraph(s),
@@ -433,7 +433,7 @@ topic({
 <p>A <b>topological sort</b> of a directed acyclic graph (DAG) is a linear ordering of its vertices such that for every edge (<i>u</i>, <i>v</i>), <i>u</i> comes before <i>v</i>. It is how you schedule tasks with dependencies: build steps, course prerequisites, spreadsheet formulas. A graph with a cycle has no topological order.</p>
 <p>The book's example is Professor Bumstead getting dressed: undershorts before pants, pants before shoes, socks before shoes, shirt before tie, and so on.</p>
 <h3>Method 1: DFS finishing times (the book's)</h3>
-<p>Run DFS. Each time a vertex finishes, insert it at the <b>front</b> of a list. The list ends up sorted by decreasing finishing time, which is a topological order: Lemma 22.11 shows that for every edge (<i>u</i>, <i>v</i>) in a DAG, <i>v.f</i> &lt; <i>u.f</i>. Time Θ(<i>V</i> + <i>E</i>).</p>
+<p>Run DFS. Each time a vertex finishes, insert it at the <b>front</b> of a list. The list ends up sorted by decreasing finishing time, which is a topological order: Theorem 22.12 shows that for every edge (<i>u</i>, <i>v</i>) in a DAG, <i>v.f</i> &lt; <i>u.f</i>. Time Θ(<i>V</i> + <i>E</i>).</p>
 <h3>Method 2: Kahn's algorithm (repeatedly remove sources)</h3>
 <p>Compute every vertex's in-degree. Put all vertices with in-degree 0 in a queue. Repeatedly remove one, append it to the output, and decrement the in-degree of its out-neighbours, enqueuing any that drop to 0. If the output has fewer than |<i>V</i>| vertices, the leftover vertices lie on a cycle. Also Θ(<i>V</i> + <i>E</i>), and it detects cycles for free.</p>
 <div class="note">Interviewers usually expect Kahn's algorithm because it is iterative and reports cycles naturally. Both are correct; the visualizer shows both.</div>
