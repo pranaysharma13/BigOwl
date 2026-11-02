@@ -38,31 +38,13 @@ Requires Node 20 or newer.
 
 ```bash
 npm install
-cp .env.example .env.local      # then fill in the two values (see below)
+cp .env.example .env.local      # then fill in the Supabase URL and anon key
 npm run dev                     # http://localhost:5173
 ```
 
 The site works without the env values. Progress then stays in the browser only, and the account page says sync is not configured.
 
 Other scripts: `npm run build`, `npm run preview`, `npm test`, `npm run typecheck`, `npm run lint`, `npm run format`.
-
-## Set up Supabase (once)
-
-1. **SQL Editor → New query**: paste `supabase/migrations/20261102000000_progress.sql` and run it.
-2. **Project Settings → API**: copy the Project URL and the anon key into `.env.local`:
-   ```
-   VITE_SUPABASE_URL=https://xxxx.supabase.co
-   VITE_SUPABASE_ANON_KEY=...
-   ```
-   Never use the `service_role` key or the database password anywhere in this project.
-3. **Authentication → URL Configuration**:
-   - Site URL: `https://<your-domain>`
-   - Redirect URLs: `http://localhost:5173/**` and `https://<your-domain>/**`
-
-## Deploy to Vercel
-
-1. Import the GitHub repository at vercel.com/new (framework preset: Vite).
-2. **Settings → Environment Variables**: add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`, then redeploy.
 
 ## Content and credits
 
