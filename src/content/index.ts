@@ -7,5 +7,6 @@ import './topics/techniques';
 import './topics/graphs';
 import './topics/selected';
 import './topics/advanced';
+import './topics/drills';
 
 export * from './registry';
