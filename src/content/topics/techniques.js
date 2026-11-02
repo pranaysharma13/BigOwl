@@ -25,7 +25,7 @@ topic({
 <h3>Strassen's algorithm</h3>
 <p>Section 4.2 applies divide and conquer to matrix multiplication. Splitting <i>n</i> × <i>n</i> matrices into four blocks naively needs 8 recursive multiplications, <i>T</i>(<i>n</i>) = 8<i>T</i>(<i>n</i>/2) + Θ(<i>n</i>²) = Θ(<i>n</i>³), no gain. Strassen found a way to use only <b>7</b> products at the cost of more additions, giving Θ(<i>n</i><sup>lg 7</sup>) ≈ Θ(<i>n</i><sup>2.81</sup>). The lesson: saving one recursive call changes the exponent.</p>
 <h3>In interviews</h3>
-<ul><li>Maximum Subarray (LC 53) expects Kadane; the follow-up asks for divide and conquer.</li><li>Best Time to Buy and Sell Stock (LC 121) is the same idea on prices: track the minimum price so far.</li><li>Maximum Product Subarray (LC 152) tracks both a max and a min ending here, since a negative can flip them.</li><li>Maximum Sum Circular Subarray (LC 918): the answer is max(Kadane, total − minimum subarray).</li></ul>`,
+<ul><li>Maximum Subarray (LC 53) expects Kadane; the follow-up asks for divide and conquer.</li><li>Best Time to Buy and Sell Stock (LC 121) is the same idea on prices: track the minimum price so far.</li><li>Maximum Product Subarray (LC 152) tracks both a max and a min ending here, since a negative can flip them.</li><li>Maximum Sum Circular Subarray (LC 918): the answer is max(Kadane, total − minimum subarray), except when every number is negative. Then the minimum subarray is the whole array, total − minimum picks the empty subarray, and the answer is plain Kadane (the largest element).</li></ul>`,
   code: {
     pseudo: `kadane(A)                       // Exercise 4.1-5
   best ← A[1]
@@ -787,7 +787,7 @@ int maxActivities(vector<pair<int, int>> a) {      // (start, finish)
 topic({
   id: 'huffman', title: 'Huffman codes', sec: '§16.3', prereq: ['greedy', 'binary-heap'],
   blurb: 'Build an optimal prefix code by repeatedly merging the two least frequent symbols.',
-  cx: [['Time', 'O(n lg n)'], ['Queue operations', '2(n − 1) extractions']],
+  cx: [['Time', 'O(n lg n)'], ['Queue operations', '2n − 1 extractions']],
   props: ['Prefix code', 'Min-priority queue'],
   tags: 'huffman coding compression prefix code greedy priority queue',
   learn: `

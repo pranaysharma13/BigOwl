@@ -123,8 +123,8 @@ vector<vector<int>> buildMatrix(int n, const vector<pair<int, int>>& edges, bool
   viz: {
     inputHint: 'Edges: a-b (undirected) or a>b (directed)',
     presets: [
-      { label: 'Figure 22.1, undirected', input: 'r-s r-v s-w w-t w-x t-x t-u x-u x-y u-y', note: 'Each undirected edge appears in two adjacency lists, and the matrix is symmetric.' },
-      { label: 'Figure 22.2 style, directed', input: 'u>v u>x x>v v>y y>x w>y w>z z>z', note: 'Each directed edge appears once. Note the self-loop z → z.' },
+      { label: 'Figure 22.3 graph, undirected', input: 'r-s r-v s-w w-t w-x t-x t-u x-u x-y u-y', note: 'Each undirected edge appears in two adjacency lists, and the matrix is symmetric.' },
+      { label: 'Figure 22.4 graph, directed', input: 'u>v u>x x>v v>y y>x w>y w>z z>z', note: 'Each directed edge appears once. Note the self-loop z → z.' },
     ],
     random: () => randGraph(Math.random() < .5, false),
     parse: s => parseGraph(s),
@@ -433,7 +433,7 @@ topic({
 <p>A <b>topological sort</b> of a directed acyclic graph (DAG) is a linear ordering of its vertices such that for every edge (<i>u</i>, <i>v</i>), <i>u</i> comes before <i>v</i>. It is how you schedule tasks with dependencies: build steps, course prerequisites, spreadsheet formulas. A graph with a cycle has no topological order.</p>
 <p>The book's example is Professor Bumstead getting dressed: undershorts before pants, pants before shoes, socks before shoes, shirt before tie, and so on.</p>
 <h3>Method 1: DFS finishing times (the book's)</h3>
-<p>Run DFS. Each time a vertex finishes, insert it at the <b>front</b> of a list. The list ends up sorted by decreasing finishing time, which is a topological order: Lemma 22.11 shows that for every edge (<i>u</i>, <i>v</i>) in a DAG, <i>v.f</i> &lt; <i>u.f</i>. Time Θ(<i>V</i> + <i>E</i>).</p>
+<p>Run DFS. Each time a vertex finishes, insert it at the <b>front</b> of a list. The list ends up sorted by decreasing finishing time, which is a topological order: Theorem 22.12 shows that for every edge (<i>u</i>, <i>v</i>) in a DAG, <i>v.f</i> &lt; <i>u.f</i>. Time Θ(<i>V</i> + <i>E</i>).</p>
 <h3>Method 2: Kahn's algorithm (repeatedly remove sources)</h3>
 <p>Compute every vertex's in-degree. Put all vertices with in-degree 0 in a queue. Repeatedly remove one, append it to the output, and decrement the in-degree of its out-neighbours, enqueuing any that drop to 0. If the output has fewer than |<i>V</i>| vertices, the leftover vertices lie on a cycle. Also Θ(<i>V</i> + <i>E</i>), and it detects cycles for free.</p>
 <div class="note">Interviewers usually expect Kahn's algorithm because it is iterative and reports cycles naturally. Both are correct; the visualizer shows both.</div>
@@ -948,7 +948,7 @@ topic({
 <h3>Longest paths and critical paths</h3>
 <p>In a general graph, longest simple path is NP-hard. In a DAG it is easy: negate the weights and find shortest paths, or run the same algorithm with “if <i>v.d</i> &lt; <i>u.d</i> + <i>w</i>” and initial values −∞. In project scheduling (PERT charts), vertices are milestones, edges are tasks with durations, and the longest path is the <b>critical path</b>: the minimum time to finish the whole project, and the tasks that cannot slip.</p>
 <h3>Why this matters for DP</h3>
-<p>Every dynamic program is secretly a shortest or longest path problem on a DAG of subproblems, evaluated in topological order. Seeing that link makes DP recurrences much easier to design.</p>
+<p>Many dynamic programs are secretly a shortest or longest path problem on a DAG of subproblems, evaluated in topological order. Seeing that link makes DP recurrences much easier to design. The view fits DPs where each state picks one predecessor (rod cutting, LCS, knapsack). DPs that combine several subproblems at once, such as matrix-chain, interval DP and tree DP, do not reduce to a single path, though their subproblems still form a DAG.</p>
 <h3>In interviews</h3>
 <ul><li>Longest Increasing Path in a Matrix (LC 329): the grid with edges toward larger values is a DAG.</li><li>Parallel Courses III (LC 2050): critical path.</li><li>Course Schedule problems that ask for the minimum number of semesters.</li></ul>`,
   code: {
@@ -1303,7 +1303,7 @@ int maxFlow(vector<vector<int>> cap, int s, int t) {   // adjacency matrix of ca
   },
   viz: {
     inputHint: 'Directed edges with capacities, then | source sink',
-    presets: [{ label: 'Figure 26.1', input: 's>v1:16 s>v2:13 v2>v1:4 v1>v3:12 v3>v2:9 v2>v4:14 v4>v3:7 v3>t:20 v4>t:4 | s t', note: 'The book’s network. Maximum flow 23.' }, { label: 'Rerouting needed', input: 's>a:1 s>b:1 a>b:1 a>t:1 b>t:1 | s t', note: 'If s → a → b → t goes first, a backward edge lets the next path undo a → b.' }],
+    presets: [{ label: 'Figure 26.1', input: 's>v1:16 s>v2:13 v2>v1:4 v1>v3:12 v3>v2:9 v2>v4:14 v4>v3:7 v3>t:20 v4>t:4 | s t', note: 'The book’s network. Maximum flow 23.' }, { label: 'Rerouting needed', input: 's>a:1 s>d:1 a>b:1 a>c:1 d>b:1 b>t:1 c>t:1 | s t', note: 'BFS takes s → a → b → t first. The next path, s → d → b → a → c → t, uses the backward edge b → a to undo a → b.' }],
     random: () => { const n = ['s', 'a', 'b', 'c', 't']; return `s>a:${rnd(3, 9)} s>b:${rnd(3, 9)} a>b:${rnd(1, 5)} a>c:${rnd(2, 8)} b>c:${rnd(1, 6)} b>t:${rnd(2, 8)} c>t:${rnd(3, 9)} | s t`; },
     parse: s => { const [body, tail] = s.split('|'); const G = parseGraph(body, { weighted: true }); if (!G.directed) throw new Error('Use directed edges with capacities, like s>a:5.'); const [src, snk] = (tail || '').trim().split(/\s+/); if (!G.nodes.includes(src) || !G.nodes.includes(snk)) throw new Error('After |, give the source and sink, for example "| s t".'); G.src = src; G.sink = snk; if (G.edges.some(e => e.w < 0)) throw new Error('Capacities must be non-negative.'); return G; },
     run(G) {

@@ -141,3 +141,52 @@ describe('topic drill answers', () => {
   it('lu decomposition', () => expect(last('matrix-ops', '2 1 1  4 3 3  8 7 9').ask?.value).toBe(2));
   it('every topic now has a step-through figure', () => expect(TOPICS.filter((t) => !t.viz).map((t) => t.id)).toEqual([]));
 });
+
+describe('content review fixes', () => {
+  const frames = (id: string, raw: string) => {
+    const v = TOPICS.find((t) => t.id === id)!.viz!;
+    return v.run(v.parse ? v.parse(raw) : raw);
+  };
+  const msgs = (id: string, raw: string) => frames(id, raw).map((f) => f.msg ?? '');
+  const preset = (id: string, label: string) => String(TOPICS.find((t) => t.id === id)!.viz!.presets.find((p) => p.label === label)!.input);
+
+  it('AVL preset shows all four rotations', () => {
+    const all = msgs('avl', preset('avl', 'All four rotations')).join('\n');
+    for (const r of ['Left-Left', 'Right-Right', 'Left-Right', 'Right-Left']) expect(all).toContain(r);
+  });
+  it('max-flow preset reroutes through a backward edge', () => {
+    const m = msgs('max-flow', preset('max-flow', 'Rerouting needed'));
+    expect(m.some((x) => x.includes('uses a backward residual edge'))).toBe(true);
+    expect(m[m.length - 1]).toContain('Maximum flow 2.');
+  });
+  it('union-find preset compresses a path', () => {
+    expect(msgs('disjoint-sets', preset('disjoint-sets', 'Build and compress')).some((x) => x.startsWith('Path compression'))).toBe(true);
+  });
+  it('KMP preset finds overlapping matches', () => {
+    const m = msgs('kmp', preset('kmp', 'Overlapping matches'));
+    expect(m[m.length - 1]).toContain('Matches at shifts 0, 2, 4.');
+  });
+  it('LP preset names both tied corners', () => {
+    const m = msgs('linear-programming', preset('linear-programming', 'Three constraints'));
+    expect(m[m.length - 1]).toContain('(4, 2)');
+    expect(m[m.length - 1]).toContain('(2, 4)');
+  });
+  it('open addressing never overwrites a stored key when probing fails', () => {
+    for (const raw of ['quadratic m=4: 0 2 4', 'double m=9: 2 5 8 26 1']) {
+      const fs = frames('hash-tables', raw);
+      const tables = fs.map((f) => (f.s as { arrays: { a: (number | null)[] }[] }).arrays[0].a);
+      for (let i = 1; i < tables.length; i++) {
+        tables[i - 1].forEach((v, slot) => {
+          if (v != null) expect(tables[i][slot], `${raw}: slot ${slot}`).toBe(v);
+        });
+      }
+      expect(fs.some((f) => (f.msg ?? '').includes('the insertion fails')), raw).toBe(true);
+    }
+  });
+  it('complexity questions ask for the tightest bound', () => {
+    for (const q of complexityQuestions()) {
+      expect(q.q).toContain('tightest');
+      expect(q.why).toContain('tightest');
+    }
+  });
+});

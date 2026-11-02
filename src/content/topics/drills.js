@@ -419,7 +419,7 @@ addViz('linear-programming', {
   inputHint: 'c1 c2 | a b c; a b c (maximize c1·x + c2·y with ax + by ≤ c, x, y ≥ 0)',
   presets: [
     { label: 'Two constraints', input: '3 2 | 1 1 4; 1 3 6' },
-    { label: 'Three constraints', input: '1 1 | 1 2 8; 3 1 9; 1 1 5', note: 'Several corners tie for the optimum when the objective is parallel to an edge.' },
+    { label: 'Three constraints', input: '1 1 | 1 1 6; 1 2 10; 2 1 10', note: 'Two corners tie for the optimum because the objective is parallel to an edge.' },
   ],
   random: () => { const k = rnd(2, 3); return `${rnd(1, 5)} ${rnd(1, 5)} | ` + Array.from({ length: k }, () => `${rnd(1, 4)} ${rnd(1, 4)} ${rnd(6, 16)}`).join('; '); },
   parse: s => {
@@ -446,7 +446,10 @@ addViz('linear-programming', {
       if (better) best = i;
       R.add(st(i, { [i + ',1']: better ? 'found' : 'cur' }), 0, `${c1}·${r2(p[0])} + ${c2}·${r2(p[1])} = ${r2(v)}${better ? ': the best so far.' : '.'}`, ask);
     });
-    R.add(st(best, { [best + ',1']: 'found' }), 0, `The maximum is ${r2(obj(pts[best]))} at (${r2(pts[best][0])}, ${r2(pts[best][1])}). Simplex does the same thing cleverly: it walks from corner to neighbouring corner, always improving, instead of checking them all.`);
+    const ties = pts.map((_, i) => i).filter(i => Math.abs(obj(pts[i]) - obj(pts[best])) < 1e-9);
+    const at = i => `(${r2(pts[i][0])}, ${r2(pts[i][1])})`;
+    const where = ties.length > 1 ? `, reached at ${ties.slice(0, -1).map(at).join(', ')} and ${at(ties[ties.length - 1])}, so every point on the edge between them is optimal too` : ` at ${at(best)}`;
+    R.add(st(best, Object.fromEntries(ties.map(i => [i + ',1', 'found']))), 0, `The maximum is ${r2(obj(pts[best]))}${where}. Simplex does the same thing cleverly: it walks from corner to neighbouring corner, always improving, instead of checking them all.`);
     return R.f;
   },
 });

@@ -569,21 +569,27 @@ vector<int> twoSum(const vector<int>& nums, int target) {   // LeetCode 1
         const fn = kind === 'linear' ? `h(k, i) = (k + i) mod ${m}` : kind === 'quadratic' ? `h(k, i) = (k + i + 3i²) mod ${m}` : `h(k, i) = (k + i·(1 + k mod ${m - 1})) mod ${m}`;
         const st = (hl, vars = {}) => ({ vars: { ...vars, α: (T.filter(x => x != null).length / m).toFixed(2) }, arrays: [{ name: 'T', label: 'T[0..' + (m - 1) + ']: ' + fn, a: [...T], hl, base: 0 }] });
         R.add(st({}), 9, `Empty table, ${fn}.`);
-        let total = 0;
+        let total = 0, failed = 0;
         for (const k of keys) {
-          let i = 0, j;
-          for (;;) {
+          let i = 0, j, found = false;
+          for (; i < m; i++) {
             j = probe(k, i);
-            if (T[j] == null) break;
-            R.add(st({ [j]: 'cmp' }, { k, i }), 13, `Probe ${i}: slot ${j} holds ${T[j]}. Collision, try i = ${i + 1}.`, i === 0 ? { q: `Key ${k}: which slot is probed first?`, pick: 'T:' + j } : null);
-            i++; if (i >= m) break;
+            if (T[j] == null) { found = true; break; }
+            R.add(st({ [j]: 'cmp' }, { k, i }), 13, `Probe ${i}: slot ${j} holds ${T[j]}. Collision${i + 1 < m ? `, try i = ${i + 1}` : ''}.`, i === 0 ? { q: `Key ${k}: which slot is probed first?`, pick: 'T:' + j } : null);
+          }
+          if (!found) {
+            total += m; failed++;
+            const why = kind === 'quadratic' ? 'Quadratic probing can cycle through only some of the slots.' : kind === 'double' ? `Double hashing reaches every slot only when the step h₂(${k}) = ${h2(k)} is coprime to m = ${m}; choosing m prime guarantees that.` : 'Every slot is full.';
+            R.add(st({}, { k, i: m - 1 }), 16, `All ${m} probes for ${k} hit occupied slots, so the insertion fails and ${k} is not stored, even though ${T.filter(x => x == null).length} slot${T.filter(x => x == null).length === 1 ? ' is' : 's are'} still empty. ${why} Continue with the next key.`);
+            continue;
           }
           total += i + 1;
           const ask = i === 0 ? { q: `Key ${k}: which slot is probed first?`, pick: 'T:' + j } : (i === 1 ? { q: `Slot ${probe(k, 0)} was taken. Which slot is probed next?`, pick: 'T:' + j, hint: kind === 'double' ? `Step size h₂(${k}) = ${h2(k)}` : kind === 'linear' ? 'Move one slot to the right, wrapping around.' : 'i = 1 adds 1 + 3 = 4.' } : null);
           T[j] = k;
           R.add(st({ [j]: 'found' }, { k, i }), 15, `Slot ${j} is empty. Store ${k} there after ${i + 1} probe${i ? 's' : ''}.`, ask);
         }
-        R.add(st({}), 9, `Done. ${total} probes for ${keys.length} inserts, ${(total / keys.length).toFixed(2)} on average.`);
+        const stored = keys.length - failed;
+        R.add(st({}), 9, failed ? `Done. ${stored} of ${keys.length} keys stored; ${failed} insertion${failed === 1 ? '' : 's'} failed because the probe sequence never reached an empty slot. ${total} probes in all, ${(total / keys.length).toFixed(2)} per attempted insert.` : `Done. ${total} probes for ${keys.length} inserts, ${(total / keys.length).toFixed(2)} on average.`);
       }
       return R.f;
     },
@@ -680,7 +686,7 @@ struct DSU {
   viz: {
     inputHint: 'n | union a b, find x, ...',
     presets: [
-      { label: 'Build and compress', input: '8 | union 1 2, union 3 4, union 1 3, union 5 6, union 7 8, union 5 7, union 2 6, find 8', note: 'Union by rank keeps the trees shallow; the final find compresses a path.' },
+      { label: 'Build and compress', input: '8 | union 1 2, union 3 4, union 1 3, union 5 6, union 7 8, union 5 7, union 2 6, find 1', note: 'Union by rank keeps the trees shallow; the final find compresses a path.' },
       { label: 'Detect a cycle', input: '5 | union 1 2, union 2 3, union 4 5, union 3 1', note: 'The last union finds 3 and 1 already share a root: that edge would close a cycle.' },
     ],
     random: () => { const n = rnd(6, 8); const ops = []; for (let i = 0; i < n; i++) ops.push(`union ${rnd(1, n)} ${rnd(1, n)}`); ops.push(`find ${rnd(1, n)}`); return n + ' | ' + ops.join(', '); },

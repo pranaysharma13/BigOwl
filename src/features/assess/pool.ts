@@ -88,8 +88,14 @@ export function patternQuestions(rand = Math.random): AQ[] {
 }
 
 const ASYMPTOTIC = /^[ΘOΩ]\(.*\)$/;
+// Labels that start with a name or an acronym keep their capital when they follow a comma.
+const PROPER = /^(Kruskal|Prim|Kosaraju|Tarjan|Johnson|Edmonds|Ford|Kadane|Strassen|Graham|Jarvis|Euclid|Rabin|Miller|Fibonacci|Kahn|Dijkstra|DFS|BFS|LUP)\b/;
+const lcFirst = (s: string) => (PROPER.test(s) ? s : s.charAt(0).toLowerCase() + s.slice(1));
 
-/** Questions like "Heapsort: worst case?" built from each topic's cost table. */
+/**
+ * Questions like "Heapsort, every case: tightest bound?" built from each topic's cost table.
+ * They ask for the tightest bound because a larger O(…) distractor would also be a true upper bound.
+ */
 export function complexityQuestions(parts?: PartId[], rand = Math.random): AQ[] {
   const facts: { t: string; title: string; label: string; v: string }[] = [];
   for (const t of TOPICS) {
@@ -110,10 +116,10 @@ export function complexityQuestions(parts?: PartId[], rand = Math.random): AQ[] 
       id: `cx#${i}`,
       kind: 'complexity' as const,
       area: f.t,
-      q: `<b>${f.title}</b>: ${f.label}?`,
+      q: `<b>${f.title}</b>, ${lcFirst(f.label)}: tightest bound?`,
       opts: [f.v, ...wrong],
       a: 0,
-      why: `${f.title}, ${f.label.charAt(0).toLowerCase() + f.label.slice(1)}: ${f.v}.`,
+      why: `The tightest bound for ${f.title}, ${lcFirst(f.label)}, is ${f.v}.`,
     };
   });
 }
