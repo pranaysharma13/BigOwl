@@ -77,6 +77,8 @@ export function About() {
         <p>The curriculum follows <i>Introduction to Algorithms</i>, 3rd edition, by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest and Clifford Stein (MIT Press, 2009). Section numbers are given so you can read along in your own copy. All explanations, pseudocode, figures and questions on BigOwl are original. BigOwl is not affiliated with, sponsored by or endorsed by MIT Press or the authors.</p>
         <h2>Interview problems</h2>
         <p>Problem names and numbers refer to problems on LeetCode, linked for practice. LeetCode is a trademark of its owner. BigOwl is not affiliated with LeetCode and does not copy its problem statements.</p>
+        <h2>Licences</h2>
+        <p>BigOwl's source code is available under the MIT License. The educational content (explanations, pseudocode, code examples, questions, pattern guides and visualizer scripts) is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener noreferrer" target="_blank">Creative Commons Attribution-NonCommercial 4.0</a>: you may share and adapt it for non-commercial use with credit to BigOwl.</p>
         <h2>Fonts</h2>
         <p>Archivo, Newsreader, Geist and Geist Mono, all under the SIL Open Font License 1.1, served from this site.</p>
         <h2>How mastery is measured</h2>

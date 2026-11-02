@@ -68,11 +68,18 @@ No other runtime scripts, SDKs, CDNs, fonts, iframes or embeds. Adding any requi
 - LeetCode: titles, numbers and links only; no statements copied. Trademark and non-affiliation notice on `/about` and `/patterns`.
 - Fonts: Archivo, Newsreader, Geist, Geist Mono via `@fontsource-variable`, SIL Open Font License 1.1, self-hosted.
 - Icons and illustrations: drawn for this project (inline SVG).
+- Licences: application code under MIT (`LICENSE`); educational content in `src/content/` under CC BY-NC 4.0 (`LICENSE-CONTENT`). Stated in the README and on `/about`.
 - npm dependencies: MIT / ISC / Apache-2.0 / BSD licences.
+
+## Repository safeguards
+
+- GitHub Actions CI (`.github/workflows/ci.yml`) runs type-check, lint, tests and build on every pull request and push to `main`, with read-only permissions.
+- `SECURITY.md` explains how to report a vulnerability privately via GitHub's private vulnerability reporting.
+- Node version pinned with `.nvmrc` (22) and `engines` in `package.json`.
 
 ## Pre-deploy checklist
 
-- [ ] `npm run typecheck && npm test && npm run build` pass
+- [ ] CI is green on the pull request (type-check, lint, tests, build)
 - [ ] `npm audit --omit=dev` shows no high or critical issues
 - [ ] No secrets in git (`git grep -n "service_role\|sb_secret"` returns nothing; `.env.local` not committed)
 - [ ] Vercel env vars set for Production and Preview
