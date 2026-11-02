@@ -569,21 +569,27 @@ vector<int> twoSum(const vector<int>& nums, int target) {   // LeetCode 1
         const fn = kind === 'linear' ? `h(k, i) = (k + i) mod ${m}` : kind === 'quadratic' ? `h(k, i) = (k + i + 3i²) mod ${m}` : `h(k, i) = (k + i·(1 + k mod ${m - 1})) mod ${m}`;
         const st = (hl, vars = {}) => ({ vars: { ...vars, α: (T.filter(x => x != null).length / m).toFixed(2) }, arrays: [{ name: 'T', label: 'T[0..' + (m - 1) + ']: ' + fn, a: [...T], hl, base: 0 }] });
         R.add(st({}), 9, `Empty table, ${fn}.`);
-        let total = 0;
+        let total = 0, failed = 0;
         for (const k of keys) {
-          let i = 0, j;
-          for (;;) {
+          let i = 0, j, found = false;
+          for (; i < m; i++) {
             j = probe(k, i);
-            if (T[j] == null) break;
-            R.add(st({ [j]: 'cmp' }, { k, i }), 13, `Probe ${i}: slot ${j} holds ${T[j]}. Collision, try i = ${i + 1}.`, i === 0 ? { q: `Key ${k}: which slot is probed first?`, pick: 'T:' + j } : null);
-            i++; if (i >= m) break;
+            if (T[j] == null) { found = true; break; }
+            R.add(st({ [j]: 'cmp' }, { k, i }), 13, `Probe ${i}: slot ${j} holds ${T[j]}. Collision${i + 1 < m ? `, try i = ${i + 1}` : ''}.`, i === 0 ? { q: `Key ${k}: which slot is probed first?`, pick: 'T:' + j } : null);
+          }
+          if (!found) {
+            total += m; failed++;
+            const why = kind === 'quadratic' ? 'Quadratic probing can cycle through only some of the slots.' : kind === 'double' ? `Double hashing reaches every slot only when the step h₂(${k}) = ${h2(k)} is coprime to m = ${m}; choosing m prime guarantees that.` : 'Every slot is full.';
+            R.add(st({}, { k, i: m - 1 }), 16, `All ${m} probes for ${k} hit occupied slots, so the insertion fails and ${k} is not stored, even though ${T.filter(x => x == null).length} slot${T.filter(x => x == null).length === 1 ? ' is' : 's are'} still empty. ${why} Continue with the next key.`);
+            continue;
           }
           total += i + 1;
           const ask = i === 0 ? { q: `Key ${k}: which slot is probed first?`, pick: 'T:' + j } : (i === 1 ? { q: `Slot ${probe(k, 0)} was taken. Which slot is probed next?`, pick: 'T:' + j, hint: kind === 'double' ? `Step size h₂(${k}) = ${h2(k)}` : kind === 'linear' ? 'Move one slot to the right, wrapping around.' : 'i = 1 adds 1 + 3 = 4.' } : null);
           T[j] = k;
           R.add(st({ [j]: 'found' }, { k, i }), 15, `Slot ${j} is empty. Store ${k} there after ${i + 1} probe${i ? 's' : ''}.`, ask);
         }
-        R.add(st({}), 9, `Done. ${total} probes for ${keys.length} inserts, ${(total / keys.length).toFixed(2)} on average.`);
+        const stored = keys.length - failed;
+        R.add(st({}), 9, failed ? `Done. ${stored} of ${keys.length} keys stored; ${failed} insertion${failed === 1 ? '' : 's'} failed because the probe sequence never reached an empty slot. ${total} probes in all, ${(total / keys.length).toFixed(2)} per attempted insert.` : `Done. ${total} probes for ${keys.length} inserts, ${(total / keys.length).toFixed(2)} on average.`);
       }
       return R.f;
     },
