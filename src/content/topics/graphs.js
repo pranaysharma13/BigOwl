@@ -989,7 +989,7 @@ vector<long long> dagShortest(const vector<int>& order,
   viz: {
     inputHint: 'Directed acyclic weighted edges | source',
     presets: [{ label: 'Figure 24.5', input: 'r>s:5 r>t:3 s>t:2 s>x:6 t>x:7 t>y:4 t>z:2 x>y:-1 x>z:1 y>z:-2 | s', note: 'The book’s DAG from source s. r is unreachable and keeps ∞.' }],
-    random: () => { const n = rnd(5, 6), names = 'ABCDEF'.slice(0, n).split(''), out = new Set(); for (let k = 0; k < n + 3; k++) { const i = rnd(0, n - 2), j = rnd(i + 1, n - 1); out.add(`${names[i]}>${names[j]}:${rnd(-3, 9)}`); } return [...out].join(' ') + ' | A'; },
+    random: () => { const n = rnd(5, 6), names = 'ABCDEF'.slice(0, n).split(''), out = new Set([`A>${names[rnd(1, n - 1)]}:${rnd(1, 9)}`]); for (let k = 0; k < n + 3; k++) { const i = rnd(0, n - 2), j = rnd(i + 1, n - 1); out.add(`${names[i]}>${names[j]}:${rnd(-3, 9)}`); } return [...out].join(' ') + ' | A'; },
     parse: s => { const G = parseGraph(s, { weighted: true }); if (!G.directed) throw new Error('Use directed edges, written a>b:4.'); return G; },
     run(G) {
       const R = Rec(), P = placeNodes(G.nodes), A = adj(G);

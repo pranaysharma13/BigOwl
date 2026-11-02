@@ -36,6 +36,7 @@ export function parseNums(str, { min = 1, max = 40, int = true, lo = -9999, hi =
   if (out.length > max) throw new Error(`Use at most ${max} numbers so the picture stays readable.`);
   return out;
 }
+export const rangeHl = (from, to, cls, base = {}) => { const o = { ...base }; for (let k = from; k <= to; k++) o[k] = cls; return o; };
 export function Rec() { const f = []; return { f, add(s, line, msg, ask) { f.push({ s: clone(s), line, msg, ask }); return this; } }; }
 export const I = { // inline icons
   play: '<svg width="16" height="16" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>',
