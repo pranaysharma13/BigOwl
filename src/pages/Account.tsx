@@ -1,10 +1,9 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router';
 import { PillButton } from '../components/Pill';
 import { supabase } from '../lib/supabase';
 import { deleteAccount, sendMagicLink, signOut, useSession } from '../features/auth/auth';
 import { useProgress } from '../features/progress/store';
-import { mergeProgress } from '../features/progress/model';
 import { usePageTitle } from '../lib/usePageTitle';
 
 function download(name: string, obj: unknown) {
@@ -68,7 +67,6 @@ export function Account() {
   const session = useSession();
   const data = useProgress((s) => s.data);
   const status = useProgress((s) => s.status);
-  const fileRef = useRef<HTMLInputElement>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [confirm, setConfirm] = useState('');
   const [askDelete, setAskDelete] = useState(false);
@@ -81,22 +79,6 @@ export function Account() {
       account: session ? { id: session.user.id, email: session.user.email, createdAt: session.user.created_at } : null,
       progress: data,
     });
-
-  const importData = async (f: File) => {
-    setErr(null);
-    setMsg(null);
-    if (f.size > 1_000_000) return setErr('That file is too large to be a BigOwl export.');
-    try {
-      const parsed = JSON.parse(await f.text());
-      const incoming = parsed?.progress ?? parsed;
-      if (!incoming || typeof incoming !== 'object' || !('topics' in incoming)) throw new Error('shape');
-      const clean = mergeProgress({}, incoming);
-      useProgress.getState().mergeIn(clean, true);
-      setMsg('Imported. Your best scores from both copies were kept.');
-    } catch {
-      setErr('That file is not a BigOwl export. Use a file from “Download my data”.');
-    }
-  };
 
   return (
     <div className="wrap page">
@@ -111,7 +93,7 @@ export function Account() {
       </header>
 
       {!supabase && (
-        <p className="notice">Accounts are not switched on for this copy of the site yet. Progress is kept in this browser. You can still download and import it below.</p>
+        <p className="notice">Accounts are not switched on for this copy of the site yet. Progress is kept in this browser. You can still download it below.</p>
       )}
 
       <div className="account-grid">
@@ -133,11 +115,9 @@ export function Account() {
 
         <section aria-labelledby="data-h">
           <h2 id="data-h" className="lbl ink sq">Your data</h2>
-          <p className="muted" style={{ fontSize: 14.5 }}>Download everything stored about you as a JSON file, or import a file you downloaded earlier.</p>
+          <p className="muted" style={{ fontSize: 14.5 }}>Download everything stored about you as a JSON file.</p>
           <div className="acts">
             <PillButton small onClick={exportData}>Download my data</PillButton>
-            <PillButton small variant="ghost" noArrow onClick={() => fileRef.current?.click()}>Import progress</PillButton>
-            <input ref={fileRef} type="file" accept="application/json,.json" hidden aria-label="Import progress file" onChange={(e) => e.target.files?.[0] && void importData(e.target.files[0])} />
           </div>
           {msg && <p className="ok-msg" role="status">{msg}</p>}
           {err && <p className="err" role="alert">{err}</p>}
