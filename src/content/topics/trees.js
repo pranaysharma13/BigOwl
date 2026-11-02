@@ -686,7 +686,7 @@ Node* insert(Node* x, int key) {
   viz: {
     inputHint: 'Keys to insert',
     presets: [
-      { label: 'All four rotations', input: '30 20 10 40 50 25 22 60 55', note: 'LL at 30, RR at 30, LR, then RL. Notes show each node’s balance factor.' },
+      { label: 'All four rotations', input: '30 20 10 40 50 5 7 60 55', note: 'LL at 30, RR at 30, LR at 10, then RL at 50. Notes show each node’s balance factor.' },
       { label: 'Ascending keys', input: '1 2 3 4 5 6 7', note: 'Repeated left rotations build a perfect tree.' },
     ],
     random: () => uniqArr(rnd(7, 10), 1, 60).join(' '),

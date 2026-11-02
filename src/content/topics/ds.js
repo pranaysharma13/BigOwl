@@ -680,7 +680,7 @@ struct DSU {
   viz: {
     inputHint: 'n | union a b, find x, ...',
     presets: [
-      { label: 'Build and compress', input: '8 | union 1 2, union 3 4, union 1 3, union 5 6, union 7 8, union 5 7, union 2 6, find 8', note: 'Union by rank keeps the trees shallow; the final find compresses a path.' },
+      { label: 'Build and compress', input: '8 | union 1 2, union 3 4, union 1 3, union 5 6, union 7 8, union 5 7, union 2 6, find 1', note: 'Union by rank keeps the trees shallow; the final find compresses a path.' },
       { label: 'Detect a cycle', input: '5 | union 1 2, union 2 3, union 4 5, union 3 1', note: 'The last union finds 3 and 1 already share a root: that edge would close a cycle.' },
     ],
     random: () => { const n = rnd(6, 8); const ops = []; for (let i = 0; i < n; i++) ops.push(`union ${rnd(1, n)} ${rnd(1, n)}`); ops.push(`find ${rnd(1, n)}`); return n + ' | ' + ops.join(', '); },

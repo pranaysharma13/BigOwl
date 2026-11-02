@@ -224,7 +224,7 @@ vector<int> kmp(const string& t, const string& p) {
     inputHint: 'text pattern',
     presets: [
       { label: 'Figure 32.11 pattern', input: 'abababacaba ababaca', note: 'π for ababaca is 0, 0, 1, 2, 3, 0, 1. One match at shift 2.' },
-      { label: 'Overlapping matches', input: 'aabaabaab aab', note: 'After each match, q falls back to π[m] and matching continues.' },
+      { label: 'Overlapping matches', input: 'abababab abab', note: 'Matches at shifts 0, 2 and 4. After each match, q falls back to π[4] = 2, so the next match reuses “ab”.' },
     ],
     random: () => { const P = Array.from({ length: rnd(3, 5) }, () => pick('ab')).join(''); return Array.from({ length: rnd(10, 14) }, () => pick('ab')).join('') + ' ' + P; },
     parse: s => { const p = s.trim().split(/\s+/); if (p.length !== 2) throw new Error('Enter the text and the pattern separated by a space.'); if (p[0].length > 20 || p[1].length > 9 || p[1].length > p[0].length) throw new Error('Text up to 20 characters, pattern up to 9 and no longer than the text.'); return p; },
@@ -608,7 +608,7 @@ vector<P> convexHull(vector<P> p) {             // monotone chain
   },
   viz: {
     inputHint: 'Points as x,y separated by spaces (0 to 20)',
-    presets: [{ label: 'Twelve points', input: '2,1 9,2 14,1 17,5 15,9 12,7 8,6 5,10 3,7 1,5 10,12 6,3', note: 'Points 7 to 12 in the scan order cause pops.' }, { label: 'A square with inner points', input: '0,0 10,0 10,10 0,10 5,5 3,6 7,2', note: 'Only the four corners survive.' }],
+    presets: [{ label: 'Twelve points', input: '2,1 9,2 14,1 17,5 15,9 12,7 8,6 5,10 3,7 1,5 10,12 6,3', note: 'The points are numbered p0 to p11 in scan order. Pops happen at p3, p5, p6, p8 and p11.' }, { label: 'A square with inner points', input: '0,0 10,0 10,10 0,10 5,5 3,6 7,2', note: 'Only the four corners survive.' }],
     random: () => Array.from({ length: rnd(8, 11) }, () => `${rnd(0, 20)},${rnd(0, 14)}`).join(' '),
     parse: s => { const pts = s.trim().split(/\s+/).map(t => { const m = /^(-?\d+),(-?\d+)$/.exec(t); if (!m) throw new Error(`"${t}" should look like x,y.`); return [+m[1], +m[2]]; }); const u = [...new Map(pts.map(p => [p.join(), p])).values()]; if (u.length < 3 || u.length > 14) throw new Error('Use between 3 and 14 distinct points.'); return u; },
     run(pts) {

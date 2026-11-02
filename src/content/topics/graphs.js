@@ -1303,7 +1303,7 @@ int maxFlow(vector<vector<int>> cap, int s, int t) {   // adjacency matrix of ca
   },
   viz: {
     inputHint: 'Directed edges with capacities, then | source sink',
-    presets: [{ label: 'Figure 26.1', input: 's>v1:16 s>v2:13 v2>v1:4 v1>v3:12 v3>v2:9 v2>v4:14 v4>v3:7 v3>t:20 v4>t:4 | s t', note: 'The book’s network. Maximum flow 23.' }, { label: 'Rerouting needed', input: 's>a:1 s>b:1 a>b:1 a>t:1 b>t:1 | s t', note: 'If s → a → b → t goes first, a backward edge lets the next path undo a → b.' }],
+    presets: [{ label: 'Figure 26.1', input: 's>v1:16 s>v2:13 v2>v1:4 v1>v3:12 v3>v2:9 v2>v4:14 v4>v3:7 v3>t:20 v4>t:4 | s t', note: 'The book’s network. Maximum flow 23.' }, { label: 'Rerouting needed', input: 's>a:1 s>d:1 a>b:1 a>c:1 d>b:1 b>t:1 c>t:1 | s t', note: 'BFS takes s → a → b → t first. The next path, s → d → b → a → c → t, uses the backward edge b → a to undo a → b.' }],
     random: () => { const n = ['s', 'a', 'b', 'c', 't']; return `s>a:${rnd(3, 9)} s>b:${rnd(3, 9)} a>b:${rnd(1, 5)} a>c:${rnd(2, 8)} b>c:${rnd(1, 6)} b>t:${rnd(2, 8)} c>t:${rnd(3, 9)} | s t`; },
     parse: s => { const [body, tail] = s.split('|'); const G = parseGraph(body, { weighted: true }); if (!G.directed) throw new Error('Use directed edges with capacities, like s>a:5.'); const [src, snk] = (tail || '').trim().split(/\s+/); if (!G.nodes.includes(src) || !G.nodes.includes(snk)) throw new Error('After |, give the source and sink, for example "| s t".'); G.src = src; G.sink = snk; if (G.edges.some(e => e.w < 0)) throw new Error('Capacities must be non-negative.'); return G; },
     run(G) {
