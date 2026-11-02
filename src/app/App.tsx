@@ -7,8 +7,8 @@ import { Progress } from '../pages/Progress';
 import { Account } from '../pages/Account';
 import { About, Privacy } from '../pages/Legal';
 import { NotFound } from '../pages/NotFound';
-import { Soon } from '../pages/Soon';
 import { PatternsIndex, PatternPage } from '../pages/Patterns';
+import { Assess } from '../pages/Assess';
 
 const router = createBrowserRouter([
   {
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       { path: '/learn/:id', element: <TopicPage /> },
       { path: '/patterns', element: <PatternsIndex /> },
       { path: '/patterns/:id', element: <PatternPage /> },
-      { path: '/assess', element: <Soon title="Assessments" /> },
+      { path: '/assess', element: <Assess /> },
       { path: '/progress', element: <Progress /> },
       { path: '/account', element: <Account /> },
       { path: '/privacy', element: <Privacy /> },
